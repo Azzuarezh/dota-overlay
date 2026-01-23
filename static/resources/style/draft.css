@@ -1,0 +1,307 @@
+:root {
+    --bg-main: rgb(167 72 171);
+    --bg-main-peak: rgb(224, 184, 191);
+    --current-selection: rgb(192, 120, 191);
+    --current-selection-peak: rgb(86, 7, 139);
+    --blk-shadow: rgba(63, 7, 69, 0.75);
+    --wht-shadow: rgba(66, 48, 48, 0.75);
+    --player-name-bg: rgba(0, 0, 0, .5);
+    --white-text: rgb(230, 230, 230);
+    --color-radiant: rgb(19, 219, 19);
+    --color-dire: rgb(160, 8, 8);
+    --screen-width: 1920px;
+    --screen-height: 1080px;
+    --gradient-main : radial-gradient(circle at center,
+                    rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(125, 47, 163) 65%,   /* Mystic purple */
+                    rgb(80, 32, 124) 100%, /*,    /* Cosmic violet */
+                    rgb(42, 15, 85) 100% /*,     Deep purple */
+                    /*rgb(11, 10, 42) 100%     Midnight sky (edges)*/
+                    );
+    --gradient-main-linear:linear-gradient(0deg,                    
+					rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(42, 15, 85) 100% ,   /*  Deep purple */
+                    rgb(11, 10, 42) 100%    /* Midnight sky (edges)*/
+	);
+}
+
+@property --info-left {
+    syntax: '<color>';
+    initial-value: rgb(26, 29, 29);
+    inherits: false;
+}
+
+@property --info-right {
+    syntax: '<color>';
+    initial-value: rgb(26, 29, 29);
+    inherits: false;
+}
+
+@keyframes active_selection {
+    from { background-color: var(--current-selection); }
+    to { background-color: var(--current-selection-peak); }
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 0%;
+	}
+	100% {
+		background-position: 0% 100%;
+	}
+}
+
+body {
+    width: var(--screen-width);
+    height: var(--screen-height);
+    /*
+    position: absolute;
+    */
+    bottom: 0;
+    margin: 0;
+    overflow: hidden;
+    font-family: Radiance_semibold;
+    background-color: transparent;
+    user-select: none;
+    text-shadow: 0px 0px 6px var(--blk-shadow);
+}
+
+#draft {
+    position: absolute;
+    display: flex;
+    height: 24%;
+    width: 100%;
+    bottom: 0;
+    color: var(--white-text);
+}
+
+.side_container {
+    width: 100%;
+}
+
+.pick_group {
+    display: flex;
+    height: 80%;
+}
+
+.ban_group {
+    display: flex;
+    height: 20%;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    background: url("/resources/image_style/stardust.png"), var(--gradient-main);
+    transition: --info-left .5s, --info-right .5s;
+    justify-content: center;
+    align-items: center;
+    border-color: var(--color-indigo-800);
+    border-width: .1em;
+    border-style: outset;
+}
+
+.with_logo{   
+    background: center center/50% no-repeat, url("/resources/image_style/center_screen_logo.png") center center/50% no-repeat, var(--gradient-main);
+}
+
+
+.info.radiant {
+    --info-left: var(--color-radiant);
+    --info-right: var(--bg-main);
+}
+
+.info.dire {
+    --info-left: var(--bg-main);
+    --info-right: var(--color-dire);
+}
+
+#scorebar_spacer {
+    width: 100%;
+    height: 10%;
+    padding-top:4px;
+}
+
+.current_selection {
+    width: 100%;
+    height: 60%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap:calc(var(--spacing) * 1);
+    flex-direction: column;
+    justify-content: center;
+    place-content: center;
+    place-items: center;
+    align-items: center;
+}
+
+#current_team {
+    font-size: 6em;
+}
+
+#current_time {
+    font-size: 2em;
+    margin-top: -1em;
+    font-weight: 600;
+}
+
+.label{
+    font-size: 1em;
+    color: var(--color-yellow-400);
+    opacity: .25;
+    transition: opacity .5s, font-size 1s;
+    object-position: center;
+}
+.series-tag {
+     color: var(--color-yellow-400);
+}
+.team-tag{
+    color: var(--color-yellow-400);
+}
+.phase-box{
+    line-height: 0.9;
+}
+
+.label.active{
+    opacity: 1;
+    font-size: 1.2em;
+    font-weight: 900;
+}
+
+.timer {
+    transition: opacity .5s, font-size 1s;
+    object-position: center;
+    opacity: .25;
+}
+
+.timer.active {
+    opacity: 1;
+    font-size: 1.6em;
+    font-weight: 900;
+}
+
+#arrow_spacer h1{
+    font-family: Unifrakturcook;
+}
+
+
+.pick {
+    position: relative;
+    width: 20%;
+    height: 100%;
+    border-color: var(--color-indigo-800);
+    border-width: .1em;
+    border-style: outset;    
+}
+
+.ban{
+    border-color: var(--color-indigo-800);
+    border-width: .1em;
+    border-style: outset; 
+}
+
+/* .pick.active {
+    animation: active_selection .75s ease-in-out infinite alternate;
+} */
+
+.ban.active {
+    position: relative;
+    background-color: var(--bg-main);
+    background: url("/resources/image_style/placeholder.png") center center/20% no-repeat;
+    background-blend-mode: luminosity;
+    width: 15%;
+    height: 100%;
+    animation: active_selection .75s ease-in-out infinite alternate;
+}
+
+.ban.radiant,
+.pick.radiant
+{
+    background-color: var(--bg-main);
+}
+
+.ban.dire,
+.pick.dire {
+    background-color: var(--bg-main);
+}
+
+
+.team_logo {
+    height: 5em;
+}
+
+.pick_video {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    z-index: 0;
+    transition-property: opacity;
+    transition-duration: 3s;
+    transition-delay: .5s;
+    transition-timing-function: ease-in;
+}
+
+.arrow{
+     animation: fadeinOpacity .75s ease forwards;
+}
+
+
+.player_name {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 1.5em;
+    line-height: 1.5em;
+    padding: 0 0 .375em 0;
+    background-color: var(--player-name-bg);
+    font-family: Reaver;
+    font-weight: 400;
+    font-size: 1em;
+    text-align: center;
+    transition: opacity cubic-bezier(0.25, 0.46, 0.45, 0.94) 3s;
+}
+
+.player_name.slotted {
+    display :block;
+    transition: opacity cubic-bezier(0.25, 0.46, 0.45, 1) 3s;
+}
+
+.ban {
+    position: relative;
+    background:var(--gradient-main);
+    width: 15%;
+    height: 100%;
+}
+
+.ban_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(.2) brightness(.8) contrast(1.05);
+    opacity: 1;
+    transition: opacity cubic-bezier(0.25, 0.46, 0.45, 0.94) 3s;
+}
+
+
+
+
+.shadow {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    box-shadow: inset 0 0 1.2em 0 var(--blk-shadow);
+}

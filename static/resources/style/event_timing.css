@@ -1,0 +1,73 @@
+:root {
+    --bg-main: rgb(167 72 171);
+    --bg-main-peak: rgb(224, 184, 191);
+    --current-selection: rgb(192, 120, 191);
+    --current-selection-peak: rgb(86, 7, 139);
+    --blk-shadow: rgba(63, 7, 69, 0.75);
+    --wht-shadow: rgba(66, 48, 48, 0.75);
+    --player-name-bg: rgba(0, 0, 0, .5);
+    --white-text: rgb(230, 230, 230);
+    --color-radiant: rgb(19, 219, 19);
+    --color-dire: rgb(160, 8, 8);
+    --screen-width: 1920px;
+    --screen-height: 1080px;
+    --gradient-main : radial-gradient(circle at center,
+                    rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(125, 47, 163) 65%,   /* Mystic purple */
+                    rgb(80, 32, 124) 100%, /*,    /* Cosmic violet */
+                    rgb(42, 15, 85) 100% /*,     Deep purple */
+                    /*rgb(11, 10, 42) 100%     Midnight sky (edges)*/
+                    );
+    --gradient-main-linear:linear-gradient(0deg,                    
+					rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(42, 15, 85) 100% ,   /*  Deep purple */
+                    rgb(11, 10, 42) 100%    /* Midnight sky (edges)*/
+	);
+}
+
+body {
+    width: var(--screen-width);
+    height: var(--screen-height);
+    /*
+    position: absolute;
+    */
+    bottom: 0;
+    margin: 0;
+    overflow: hidden;
+    font-family: Radiance_semibold;
+    background-color: transparent;
+    user-select: none;
+    text-shadow: 0px 0px 6px var(--blk-shadow);
+}
+
+#item_timing {
+    position: absolute;
+    font-size: 2em;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    color: var(--white-text);
+}
+
+#roshan_timing {
+    position: absolute;
+    font-size: 2em;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    color: var(--white-text);
+}
+
+#firstblood_timing{
+    position: absolute;
+    font-size: 2em;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    color: var(--white-text);
+}
