@@ -44,6 +44,8 @@ let picking_order = $state([])
 let current_team_pick = $state("none")
 let watch_index = $state(0)
 
+//adjustment for patch 7.40 new draft rule
+let firstPickTeam = $state("")
 
 // onMount(() => {
 // 		overlaySocket.auth = {client_type:'overlay_client', token:data.gsi_token}
@@ -192,42 +194,90 @@ let watch_index = $state(0)
 
     //method 2 : drawback is some heroes will popup overriding the previous animation because quick pick in 2nd pick phase (usualy tem pick 2 heroes and they pick as soon as after pick 1 hero)
     // commonly happen on 2nd pick phase
-    if(picking_order.length == 0) {     
-    let draft_order = []
-    //cannot rely on home team data from dota client, kinda bullshit sometimes home team is dire or radiant
-    //const is_radiant_fp = (evtData.draft && evtData.draft.team2.home_team);
+    // if(picking_order.length == 0) {     
+    // let draft_order = []
+    // //const is_radiant_fp = (evtData.draft && evtData.draft.team2.home_team);
+    // console.log('draft evt data:', JSON.stringify(evtData.draft))
+    // // console.log('is radiant first pick:', evtData.draft.team2.home_team)
+    // // console.log('is dire first pick:', evtData.draft.team3.home_team)
+    // captains_mode.draft.forEach((phase) => {
+    //     //only put pick selection in draft_order  
+    //     if(phase.name.includes("Pick phase", 0)){
+    //         phase.selections.forEach((selection) => {
+    //         //console.log('selection:', selection)
+    //         //const team = is_radiant_fp ? (selection.team === "first" ? "team2" : "team3") : (selection.team === "first" ? "team3" : "team2");
+    //         const team =(selection.team === "first" )? "team2" : "team3"
+    //         //console.log('is radiant first pick:', is_radiant_fp, ' selection team:', selection.team, ' team:', team)
+    //         const el_id = `${team}_${selection.type}${selection.id}`;
+    //         draft_order.push(el_id);
+    //       });
+    //     }       
+    //   });
+    //   picking_order = draft_order   
+    // }
+    // else{
+    //   //check current pick index for watching
+    //   for(const order in picking_order){
+    //     let po = picking_order[order].split("_") //split string team(x)_pick(n)
+    //     let current_team = po[0] //team2 or team3
+    //     let pick_index = po[1] +'_class' // added suffix class for checking key
+    //     if(evtData.draft[current_team][pick_index] == "") {
+    //       current_team_pick = picking_order[order]
+    //       break
+    //     }      
+    //   }    
+    // }
+    // end method 2
 
-    captains_mode.draft.forEach((phase) => {
-        //only put pick selection in draft_order  
-        if(phase.name.includes("Pick phase", 0)){
-            phase.selections.forEach((selection) => {
-            //console.log('selection:', selection)
-            //const team = is_radiant_fp ? (selection.team === "first" ? "team2" : "team3") : (selection.team === "first" ? "team3" : "team2");
-            const team =(selection.team === "first" )? "team2" : "team3"
-            //console.log('is radiant first pick:', is_radiant_fp, ' selection team:', selection.team, ' team:', team)
-            const el_id = `${team}_${selection.type}${selection.id}`;
-            draft_order.push(el_id);
-          });
-        }       
-      });
-      picking_order = draft_order   
+    //method 3 : changes from  patch 7.40 where draft has update new rule (cannot rely on home team anymore and also adjust in game_mode.js file). Drawback still same as method 2 above
+  if(picking_order.length == 0) {     
+      let draft_order = []
+      //wait until one team ban first (first ban = first pick. see patch 7.40)
+      //const is_radiant_fp = (evtData.draft && evtData.draft.team2.home_team);
+      if(firstPickTeam ==""){
+         if(evtData.draft.team2.ban0_class != "" && evtData.draft.team3.ban0_class == ""){
+          firstPickTeam = "radiant" //both team already ban, just assume radiant first pick
+        }
+        else if(evtData.draft.team3.ban0_class != "" && evtData.draft.team2.ban0_class == ""){
+          firstPickTeam = "dire" //both team already ban, just assume radiant first pick
+        }
+      }
+     
+
+      //only if first pick team already determined
+      if(firstPickTeam != ""){
+        const is_radiant_fp = (firstPickTeam == "radiant") ? true : false
+        console.log('determined first pick team:', firstPickTeam, ' is radiant first pick:', is_radiant_fp)
+      
+      captains_mode.draft.forEach((phase) => {
+          //only put pick selection in draft_order  
+          if(phase.name.includes("Pick phase", 0)){
+              phase.selections.forEach((selection) => {
+              //console.log('selection:', selection)
+              const team = is_radiant_fp ? (selection.team === "first" ? "team2" : "team3") : (selection.team === "first" ? "team3" : "team2");
+              //console.log('is radiant first pick:', is_radiant_fp, ' selection team:', selection.team, ' team:', team)
+              const el_id = `${team}_${selection.type}${selection.id}`;
+              draft_order.push(el_id);
+            });
+          }       
+        });
+        picking_order = draft_order   
+      }
+      else{
+        //check current pick index for watching
+        for(const order in picking_order){
+          let po = picking_order[order].split("_") //split string team(x)_pick(n)
+          let current_team = po[0] //team2 or team3
+          let pick_index = po[1] +'_class' // added suffix class for checking key
+          if(evtData.draft[current_team][pick_index] == "") {
+            current_team_pick = picking_order[order]
+            break
+          }      
+        }    
+      }
     }
-    else{
-      //check current pick index for watching
-      for(const order in picking_order){
-        let po = picking_order[order].split("_") //split string team(x)_pick(n)
-        let current_team = po[0] //team2 or team3
-        let pick_index = po[1] +'_class' // added suffix class for checking key
-        if(evtData.draft[current_team][pick_index] == "") {
-          current_team_pick = picking_order[order]
-          break
-        }      
-      }    
-    }
-
-
-    
-
+      
+    //check current pick index for watching
     if(picking_order[watch_index]){
       let x = picking_order[watch_index].split('_')
       let t = x[0]
@@ -240,8 +290,8 @@ let watch_index = $state(0)
           popup_visible.value = false;
         }, 4500)   
       }
-    }
-  //end method 2
+      }
+    //end method 3
     
   
 

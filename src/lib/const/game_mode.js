@@ -1,3 +1,4 @@
+// Captains Mode Draft Structure (Patch 7.40)
 export const captains_mode ={
     "max_heroes": 24,
     "draft": [
