@@ -117,7 +117,7 @@ this project actually inspired by some other repo which I will mention below, I'
 # Buy me a Coffee 
 
 ## PayPal
-I would appreciate you guys to help me this project by sending me a donation for my project. You can scan my Paypal QR code below:
+I would appreciate you guys to help me this project by sending me a donation for my project. You can click this [link](https://www.paypal.me/MuhammadThahir739)  or scan my Paypal QR code below:
 
 ![](docs/qr_paypal.jpg)
 
