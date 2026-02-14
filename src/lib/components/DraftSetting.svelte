@@ -1,14 +1,10 @@
 <script>
   import { asset } from '$app/paths';
-  // import {setting_override, toggle_pause_music, series_type,series_description,radiant_team_info, dire_team_info, formatted_series_type}  from '../../routes/overlays/[gsitoken]/draft/draftstate.svelte'
+  import {MATCH_SERIES} from '$lib/const/const';
   
   let data = $props()
 
-  let series =[
-    {"label":"Best of 1","value":"bo1"},
-    {"label":"Best of 3","value":"bo3"},
-    {"label":"Best of 5","value":"bo5"}
-  ]
+  
 
   let teams = [
      { name: "Aurora",             tag: "AURORA" },
@@ -64,8 +60,6 @@
   }
 
 
-  
-
   function play_pause(){
     data.socket.emit('overlay-client:toggle_music', {target_socket: target_socket})
   }
@@ -73,7 +67,10 @@
 
 </script>
 <div>
- <p class="text-xl">click <a data-sveltekit-preload-data="false" href={data.overlay_page_url} target="_blank"> 👉 here 👈</a> to open draft overlay page. copy the url into the OBS brower to enable the overlays</p>
+  <h1 class="font-[radiance] text-2xl">Draft Actions</h1>
+  <a class="button-goto-overlay"
+    data-sveltekit-preload-data="false" href={data.overlay_page_url} target="_blank">Open overlay page</a>
+    <button class="button-toggle-music" onclick={play_pause}>Toggle Play/Pause Music on Overlay Page</button>
 </div>
     <!-- Toggle Show/Hide Match Setting -->
     <div class="w-full" >
@@ -81,7 +78,7 @@
         <h1 class="font-bold uppercase text-xl ">Match Setting</h1>
         <div class="pt-1 text-lg">This tab is to configure draft overlays. You can change the series name, descriptions team name, and score to the overlay. You may also can play background music</div>
         <div class="flex">
-          <button class="setting" onclick={play_pause}>Play/Pause Music</button>
+          
         </div>
       </div>
       <div class="my-10 border-b border-gray-100">
@@ -93,7 +90,7 @@
         <option value="" disabled>
                Choose between Best of 1, 3, or 5
               </option>
-          {#each series as serial}
+          {#each MATCH_SERIES as serial}
               <option value={serial.value}>
                 {serial.label}
               </option>
@@ -204,4 +201,6 @@
   input.custom-checkbox{
     margin-left: 1.5em;
   }
+
+  
 </style>

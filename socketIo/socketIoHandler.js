@@ -19,7 +19,6 @@ export default function injectSocketIO(server) {
     }
     );
     io.on('connection', async(socket) => {
-
       //joining the room
       if(socket.client_type ==='app_client'){
         const userId = socket.userId
@@ -207,6 +206,16 @@ export default function injectSocketIO(server) {
         const target_socket = data.target_socket
         try{
           io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:toggle_music')
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+      socket.on('overlay-client:toggle_show_roshan',(data)=>{
+        console.log('event settings show roshan overlay received')
+        const target_socket = data.target_socket
+        try{
+          io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:toggle_show_roshan')
         }catch(err){
           console.log(err)
         }

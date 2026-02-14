@@ -4,6 +4,7 @@ import { createServer } from 'http';
 import cors from 'cors'
 import injectSocketIO from './socketIo/socketIoHandler.js';
 import bodyParser from 'body-parser';
+import {synchronize_sequelize} from './src/repository/db_sync.js';
 const app = express();
 app.use(cors())
 app.set("etag", false);
@@ -15,6 +16,9 @@ app.use(handler);
 const httpServer = createServer(app);
 
 injectSocketIO(httpServer)
+
+await synchronize_sequelize()
+
 
 httpServer.listen(3000, function () { // Start the Express server on port 3001
     console.log('listening on *:3000');

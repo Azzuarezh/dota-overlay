@@ -2,6 +2,8 @@ import sequelize from '../../db'
 import { DataTypes, where } from "sequelize";
 import UserSessions from './UserSessions';
 import UserGsiToken from './UserGsiToken';
+import DotaPlayers from '../Dota/player/DotaPlayers';
+import DotaTeams from '../Dota/team/DotaTeams';
 import { hashPassword } from '../../../lib/server/util/password';
 
 const Users = sequelize.define(
@@ -85,6 +87,15 @@ Users.hasMany(UserSessions, {
   }
 )
 
+DotaTeams.hasMany(DotaPlayers, {
+  onDelete:'CASCADE',
+  foreignKey: {
+    name:'playerId',
+    field:'playerId'
+  }
+  }
+)
+
 
 export async function createUser(firstName,lastName,email, userName, password) {
 	const passwordHash = await hashPassword(password);
@@ -125,6 +136,5 @@ export async function setUserIsConnected(user_id){
     }
   })
 }
-
-sequelize.sync()
+sequelize.sync();
 export default Users;

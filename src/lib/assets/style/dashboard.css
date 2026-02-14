@@ -47,26 +47,126 @@ textarea {
   border-radius: 2px;
 }
 
-input:disabled {
-  color: #ccc;
+.button-goto-overlay {
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
 }
 
-button {
+.button-goto-overlay:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    text-decoration: none; 
+}
+
+.button-goto-overlay:active {
+    position: relative;
+    top: 1px; /* Gives a subtle "pressed" effect */
+    text-decoration: none; 
+}
+
+.button-goto-overlay:visited {
+    color:white;
+    text-decoration: none; 
+}
+
+
+.button-toggle-music{
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.button-toggle-music:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    text-decoration: none; 
+}
+
+.button-toggle-music:active {
+    position: relative;
+    top: 1px; /* Gives a subtle "pressed" effect */
+    text-decoration: none; 
+}
+
+.button-show-roshan-overlay {
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.button-show-roshan-overlay:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    text-decoration: none; 
+}
+
+.button-show-roshan-overlay:active {
+    position: relative;
+    top: 1px; /* Gives a subtle "pressed" effect */
+    text-decoration: none; 
+}
+
+
+.button-create-player {
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.custom-file-input {
+  /* optional: set font, color for the "No file chosen" text */
   color: #333;
-  background-color: #f4f4f4;
-  outline: none;
 }
 
-button:disabled {
-  color: #999;
+/* Styles the button part specifically */
+.custom-file-input::file-selector-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 15px; /* Adds space between the button and the file name text */
 }
 
-button:not(:disabled):active {
-  background-color: #ddd;
+/* Add hover effects */
+.custom-file-input::file-selector-button:hover {
+  background-color: #0056b3;
 }
 
-button:focus {
-  border-color: #666;
-}
 
 /* do styling for dashboard overlays here */

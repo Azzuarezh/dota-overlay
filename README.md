@@ -115,8 +115,15 @@ this project actually inspired by some other repo which I will mention below, I'
 - [Open Dota API](https://www.opendota.com) for API guide (team names, players, items, heroes etc.)
 
 # Buy me a Coffee 
-I would appreciate you guys to help me this project by sending me a donation for my project. For my fellow indonesian, you can send the donation by clicking this [link](https://saweria.co/mthahir) or you can scan QR code below:
 
+## PayPal
+I would appreciate you guys to help me this project by sending me a donation for my project. You can scan my Paypal QR code below:
+
+![](docs/qr_paypal.jpg)
+
+
+## Saweria (Indonesia)
+For my fellow indonesian, you can send the donation by clicking this [link](https://saweria.co/mthahir) or you can scan QR code below:
 ![](docs/qr_saweria.jpg)
 
 

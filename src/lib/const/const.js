@@ -11,6 +11,12 @@ export const [GS_INIT, GS_WAIT, GS_DRAFT, GS_STRAT, GS_SHOW, GS_PRE, GS_INGAME, 
         "DOTA_GAMERULES_STATE_LAST",
         "DOTA_GAMERULES_STATE_DISCONNECT"
     ];
+  
+export const MATCH_SERIES = [
+    {"label":"Best of 1","value":"bo1"},
+    {"label":"Best of 3","value":"bo3"},
+    {"label":"Best of 5","value":"bo5"}
+  ];
 
  export const [GENERIC_EVENT,EVENT_ROSHAN_KILLED, EVENT_TORMENTOR_KILL, EVENT_ITEM_PURCHASE, FIRST_BLOOD] = [
         "generic_event",

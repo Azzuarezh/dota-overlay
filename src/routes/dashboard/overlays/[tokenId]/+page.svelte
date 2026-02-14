@@ -2,13 +2,14 @@
     import DraftSetting from '$lib/components/DraftSetting.svelte';
     import '$lib/assets/style/dashboard.css'
     import io from "socket.io-client";
+    import IngameSetting from '$lib/components/IngameSetting.svelte';
     let {data} = $props()
     let activeTab = $state('Draft'); // 👈 current active tab
     let dota_client_connected_status = $state(false)
    
 
-    let overlay_page_url = `/overlays/${data.gsi_client.token}/draft`
-  
+    let draft_overlay_page_url = `/overlays/${data.gsi_client.token}/draft`
+    let ingame_overlay_page_url = `/overlays/${data.gsi_client.token}/ingame`
 
     let socket = io('http://localhost:3000', {auth:{client_type:'overlay_client', token : data.gsi_client.token}})
     socket.on('ping', (data) =>{
@@ -61,13 +62,16 @@
            <DraftSetting 
            userId={data.user.id}
            gsi_client_id={data.gsi_client.id}
-           overlay_page_url={overlay_page_url}
+           overlay_page_url={draft_overlay_page_url}
            socket={socket}/>
           </div>
         {:else if activeTab === 'Ingame'}
           <div class="text-gray-700 animate-fadeIn">
-            <h3 class="font-semibold text-lg mb-2">Details</h3>
-            <p class="text-sm">Here you can view more detailed information and user attributes.</p>
+            <IngameSetting 
+            userId={data.user.id}
+            gsi_client_id={data.gsi_client.id}
+            overlay_page_url={ingame_overlay_page_url}
+            socket={socket}/>
           </div>
         {:else if activeTab === 'Scoreboard'}
           <div class="text-gray-700 animate-fadeIn">

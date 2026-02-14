@@ -30,9 +30,6 @@
   }
 let routes  = page.route?.id?.split('/')
 
-function override_draft_overlays(settings){
-  socket.emit('')
-}
 
 </script>
 <svelte:document />

@@ -30,7 +30,7 @@ label {
   display: block;
 }
 
-input,
+/* input,
 button,
 select,
 textarea {
@@ -42,7 +42,7 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
-}
+} */
 
 
 button:focus {
