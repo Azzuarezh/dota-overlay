@@ -2,8 +2,9 @@ import sequelize from '../../db'
 import { DataTypes, where } from "sequelize";
 import UserSessions from './UserSessions';
 import UserGsiToken from './UserGsiToken';
-import DotaPlayers from '../Dota/player/DotaPlayers';
 import DotaTeams from '../Dota/team/DotaTeams';
+import DotaPlayers from '../Dota/player/DotaPlayers';
+
 import { hashPassword } from '../../../lib/server/util/password';
 
 const Users = sequelize.define(
@@ -87,14 +88,20 @@ Users.hasMany(UserSessions, {
   }
 )
 
-DotaTeams.hasMany(DotaPlayers, {
-  onDelete:'CASCADE',
+DotaTeams.hasMany(DotaPlayers,{
   foreignKey: {
-    name:'playerId',
-    field:'playerId'
-  }
-  }
-)
+    name:'teamId',
+    field:'team_id'
+  }, as:'players'
+})
+DotaPlayers.belongsTo(DotaTeams, {
+  foreignKey: { 
+    name: 'teamId', 
+    field: 'team_id' 
+  },
+  as: 'team'
+})
+
 
 
 export async function createUser(firstName,lastName,email, userName, password) {

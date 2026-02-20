@@ -3,10 +3,17 @@
     import '$lib/assets/style/dashboard.css'
     import io from "socket.io-client";
     import IngameSetting from '$lib/components/IngameSetting.svelte';
+    import {GS_INGAME, GS_PRE, translateGSCodeToText} from '$lib/const/const.js'
     let {data} = $props()
-    let activeTab = $state('Draft'); // 👈 current active tab
+    let activeTab = $state('Draft'); 
     let dota_client_connected_status = $state(false)
-   
+    
+    let leagueStarted = $state(false)
+    let radiantTeamDetail = $state({team_name:'',team_tag:'', score:0})
+    let direTeamDetail =$state({team_name:'',team_tag:'', score:0})
+    let gamePhase = $state(null)
+    let gameTime = $state('')
+    let clockTime = $state('')
 
     let draft_overlay_page_url = `/overlays/${data.gsi_client.token}/draft`
     let ingame_overlay_page_url = `/overlays/${data.gsi_client.token}/ingame`
@@ -15,17 +22,52 @@
     socket.on('ping', (data) =>{
         dota_client_connected_status = data
         //every 5 second, set to false if no event received
-        setTimeout(()=> {dota_client_connected_status = false},10000)
+        setTimeout(()=> {dota_client_connected_status = false},5000)
     })
 
+  socket.on('gamestate:time', (data) =>{
+    if(!leagueStarted) leagueStarted = true
+    gamePhase = data.game_state
+    gameTime = data.game_time
+    clockTime = data.clock_time
+  })
 
+  socket.on('league', (data)=>{
+    if(data)leagueStarted = true
+    if(data.radiant){
+      radiantTeamDetail.team_name = data.radiant.name
+      radiantTeamDetail.team_tag = data.radiant.team_tag
+      radiantTeamDetail.score = data.radiant.series_wins
+    }
+    if(data.dire){
+      direTeamDetail.team_name = data.dire.name
+      direTeamDetail.team_tag = data.dire.team_tag
+      direTeamDetail.score = data.dire.series_wins
+    }
+  })
    
 </script>
 <div class="grid grid-cols-2">
   <h1 class="text-3xl font-bold">{data.gsi_client.name.toUpperCase()}</h1>
   <h1 class="text-3xl font-bold items-center place-self-end-safe mr-1 pr-2">status: {(dota_client_connected_status)?"🟢":"🔴"}</h1>
 </div>
-<!-- <MatchSetting/> -->
+
+  {#if leagueStarted}
+  <p class="font-[radiance] text-2xl bg-red-500 rounded-2xl px-2 inline-block text-white animate-pulse">Live</p>
+  <div class="mb-10">    
+    <span class="font-[radiance] text-4xl">{radiantTeamDetail.team_name} ({radiantTeamDetail.team_tag}) : {radiantTeamDetail.score} </span> VS
+    <span class="font-[radiance] text-4xl"> {direTeamDetail.score} : {direTeamDetail.team_name} ({direTeamDetail.team_tag})</span>
+  </div>
+  <p class="font-[radiance] text-2xl px-2 inline-block animate-pulse bg-radiant rounded-lg">
+    {#if gamePhase == GS_PRE || gamePhase == GS_INGAME}
+      {translateGSCodeToText(gamePhase)}: {clockTime} 
+    {:else}
+      {translateGSCodeToText(gamePhase)}: {gameTime}
+    {/if}
+
+  </p>
+
+  {/if}
   <!-- Tabs -->
       <div class="bg-white p-6 rounded-xl shadow">
         <div class="border-b border-gray-200 mb-4">

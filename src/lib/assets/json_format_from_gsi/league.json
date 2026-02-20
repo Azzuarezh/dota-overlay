@@ -1,0 +1,65 @@
+{
+    "league_id": 19099,
+    "match_id": "8675768384",
+    "name": "BLAST SLAM VI",
+    "tier": 2,
+    "region": 3,
+    "url": "https://blast.tv/dota",
+    "description": "12 teams from around the world will clash to forge their legacy in November for a staggering prize pool of $1,000,000. \nThe event promises to be a perfect blend of entertainment and competition for Dota fans and teams alike.",
+    "notes": "",
+    "start_timestamp": 1769788800,
+    "end_timestamp": 1771344000,
+    "pro_circuit_points": 0,
+    "image_bits": 1537,
+    "status": 3,
+    "most_recent_activity": 1771185630,
+    "registration_period": 10,
+    "base_prize_pool": 1000000,
+    "total_prize_pool": 1000000,
+    "radiant": {
+        "team_id": 8291895,
+        "team_tag": "Tundra",
+        "name": "Tundra Esports",
+        "series_wins": 0
+    },
+    "dire": {
+        "team_id": 9828897,
+        "team_tag": "RKX",
+        "name": "REKONIX",
+        "series_wins": 0
+    },
+    "series_id": 1061159,
+    "start_time": 1770109234,
+    "team_id_1": 8291895,
+    "team_id_2": 9828897,
+    "streams": {
+        "stream_7469": {
+            "stream_id": 7469,
+            "language": 0,
+            "name": "SLAM VI",
+            "broadcast_provider": 2,
+            "stream_url": "https://www.twitch.tv/blastdota",
+            "vod_url": "https://www.youtube.com/@BLASTDota"
+        },
+        "stream_7470": {
+            "stream_id": 7470,
+            "language": 0,
+            "name": "SLAM VI",
+            "broadcast_provider": 3,
+            "stream_url": ":https://www.youtube.com/@BLASTDota",
+            "vod_url": ":https://www.youtube.com/@BLASTDota"
+        },
+        "stream_7471": {
+            "stream_id": 7471,
+            "language": 0,
+            "name": "SLAM VI",
+            "broadcast_provider": 100,
+            "stream_url": "blast.tv/dota/live",
+            "vod_url": "https://www.youtube.com/@BLASTDota"
+        }
+    },
+    "target_socket": {
+        "userId": 1,
+        "gsi_client_id": 1
+    }
+}

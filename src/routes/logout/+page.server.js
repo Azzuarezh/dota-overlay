@@ -9,7 +9,6 @@ async function action(event){
 			message: "Not authenticated"
 		});
 	}
-    console.log('session :', event.locals.session)
 	invalidateSession(event.locals.session.sessionToken);
 	deleteSessionTokenCookie(event);
 	return redirect(302, "/login");

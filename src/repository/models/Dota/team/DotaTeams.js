@@ -4,14 +4,17 @@ import { DataTypes, where } from "sequelize";
 const DotaTeams = sequelize.define(
   'DotaTeams',
   {
-    id:{
+    teamId:{
         type: DataTypes.INTEGER,
+        unique:true,
         primaryKey:true,
-        autoIncrement:true,
         allowNull:false,
+        validate:{
+          len:[0,7]
+        }
     },
     name:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:false,
 
     },
@@ -21,11 +24,7 @@ const DotaTeams = sequelize.define(
 
     },
     logo:{
-      type:DataTypes.STRING,
-      allowNull:false,
-      validate:{
-        isAlphanumeric:true
-      }
+      type:DataTypes.BLOB('medium'),
     }
   },
   {
@@ -37,11 +36,24 @@ const DotaTeams = sequelize.define(
 );
 
 
-export async function createTeam(teamName,teamTag,logo, ) {
+export async function getDotaTeams(){
+  return await DotaTeams.findAll()
+}
+
+export async function getDotaTeamByTeamId(team_id){
+return await DotaTeams.findOne({ where:{teamId:team_id}});
+}
+
+export async function getDotaTeamIdAndNamesAndTag(){
+  return await DotaTeams.findAll({attributes:['teamId','name','tag']})
+}
+
+export async function createDotaTeam(team_id,teamName,teamTag ) {
     const createdTeam = await DotaTeams.create(
-            {	name: teamName, 
-                tag: teamTag,
-                logo: logo
+            {	
+              teamId:team_id,  
+              name: teamName, 
+              tag: teamTag
             },
         )
     if (createdTeam === null) {
@@ -49,5 +61,34 @@ export async function createTeam(teamName,teamTag,logo, ) {
     }
     return createdTeam;
 }
+export async function updateTeam(teamObject){
+   const teamId = teamObject.id;
+      //exclude the id for set the data. the id is only for where syntax
+      delete teamObject.id;
+      const updatedTeam = await DotaTeams.update(teamObject,
+          {
+          where:{
+            teamId: teamId
+          }
+       })
+      if (updatedTeam === null) {
+          throw new Error("Unexpected error");
+      }
+      return updateTeam;
+}
+
+export async function updateTeamLogo(team_id, teamLogoFile){
+  const updatedTeam = await DotaTeams.update(
+        {logo: teamLogoFile},
+        {
+          where:{
+            teamId: team_id
+          }
+        })
+
+  if(updatedTeam === null) throw new Error("unexpected error")
+  return updatedTeam;
+}
+
 
 export default DotaTeams;

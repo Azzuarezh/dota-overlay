@@ -1,6 +1,5 @@
 <script>
   import CenterScreen from "$lib/components/CenterScreen.svelte";
-  import Callout from "$lib/components/Callout.svelte";
   import HeroPick from "$lib/components/HeroPick.svelte";
   import HeroBans from "$lib/components/HeroBans.svelte";
   import '$lib/assets/style/draft.css'
@@ -23,8 +22,16 @@
  let series_description = $state({ desc: data.series_description })
  let draft_ended = $state({ value: data.draft_ended });
  let turn = $state({ value: data.turn });
- let radiant_team_info = $state({ value: data.radiant_team_info});
- let dire_team_info = $state({ value: data.dire_team_info });
+
+
+
+ const default_radiant_info =data.radiant_team_info
+ const default_dire_info = data.dire_team_info 
+
+
+ let radiant_team_info = $state({ value: default_radiant_info});
+ let dire_team_info = $state({ value: default_dire_info });
+ 
   //heroes choosen by team
 let radiant_choosen_heroes = $state({ values: data.radiant_choosen_heroes })
 let dire_choosen_heroes = $state({ values: data.dire_choosen_heroes })
@@ -33,27 +40,21 @@ let radiant_picked_heroes = $state({ values: data.radiant_picked_heroes });
 let radiant_banned_heroes = $state({ values: data.radiant_banned_heroes })
 let dire_picked_heroes = $state({ values: data.dire_picked_heroes });
 let dire_banned_heroes = $state({ values: data.dire_banned_heroes })
+
 let setting_override = $state({ value: data.setting_override })
+let team_info_override = $state({value:data.team_info_override})
+
 let toggle_pause_music = $state({ value: data.toggle_pause_music })
 
 let announced_picked_hero = $state({ name: data.announced_picked_hero })
 let popup_visible = $state({ value: data.popup_visible })
 
-
-let picking_order = $state([])
-let current_team_pick = $state("none")
-let watch_index = $state(0)
-
-//adjustment for patch 7.40 new draft rule
-let firstPickTeam = $state("")
-
-// onMount(() => {
-// 		overlaySocket.auth = {client_type:'overlay_client', token:data.gsi_token}
-//     if(!overlaySocket.connected) overlaySocket.connect()
-// 	});
+let loaded_team_logo_radiant = $state(false)
+let loaded_team_logo_dire = $state(false)
 
 
-  export const formatted_series_type = (series) => {
+
+export const formatted_series_type = (series) => {
     switch (series) {
       case "bo1":
         return "BEST OF 1";
@@ -63,8 +64,22 @@ let firstPickTeam = $state("")
         return "BEST OF 5";
     }
   }
+//team params is from socket io , teamId is from db
+function findTeamIndex(team_id){
+    if(Object.keys(data.team_list).length !== 0){
+      const index= data.team_list.findIndex(t => t.teamId == team_id)
+      return index;
+    }    
+  }
 
-  const overlaySocket = io('http://localhost:3000', {auth:{client_type:'overlay_client', token:data.gsi_token}})
+let picking_order = $state([])
+let current_team_pick = $state("none")
+let watch_index = $state(0)
+
+//adjustment for patch 7.40 new draft rule
+let firstPickTeam = $state("")
+
+  const overlaySocket = io(data.SOCKET_IO_URL, {auth:{client_type:'overlay_client', token:data.gsi_token}})
 
   // data.socket.auth = {client_type:'overlay_client', token: data.gsi_token}
 	// if(!data.socket.connected) data.socket.connect()
@@ -78,51 +93,53 @@ let firstPickTeam = $state("")
     radiant_bonus_time.value = (evtData.draft.radiant_bonus_time)?evtData.draft.radiant_bonus_time : 0;
     dire_bonus_time.value = (evtData.draft.dire_bonus_time)?evtData.draft.dire_bonus_time : 0;
     
-    // console.log('draft active time: ', draft_active_time_remaining.value)
-
     // GENERAL INFO (Center Screen)
     //series type (bo1/bo3/bo5 etc)
-    series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "";
+    series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "bo1";
     series_description.desc = (setting_override.value)?series_description.desc:formatted_series_type(series_type.type)
     active_team.name = evtData.draft.activeteam === 2 ? "radiant" : "dire";
     turn.value = active_team.name
+    if (team_info_override.value == false) {
+      //to ensure the event not fired everytime draft update, add flag loaded team logo
+      if(!loaded_team_logo_radiant){
+        //radiant team info
+        if (evtData.league && evtData.league.radiant) {
+          const radiant = evtData.league.radiant
+          const evtRadiantTeamId = radiant.team_id;
+          const selectedTeamIdx = findTeamIndex(evtRadiantTeamId)
+          const radiant_team = data.team_list[selectedTeamIdx]
+          if(radiant_team.logo != null) radiant_team.logo ='data:image/png;base64,' + radiant_team.logo
+          radiant_team_info.value = radiant_team
+          if(!evtData.league.series_type) radiant_team_info.value.series_wins = 0
+          loaded_team_logo_radiant = true
+        }
+        else {
+          //default
+          radiant_team_info.value = default_radiant_info
+        }
 
-    if (setting_override.value == false) {
-      //radiant team info
-      if (evtData.league && evtData.league.radiant) {
-        const radiant = evtData.league.radiant
-        radiant_team_info.value = {
-          name: radiant.name,
-          tag: radiant.team_tag.toUpperCase(),
-          series_wins: radiant.series_wins
+      }
+      
+      
+      if(!loaded_team_logo_dire){
+        //dire team info
+        
+        if (evtData.league && evtData.league.dire) {
+          const dire = evtData.league.dire
+          const evtDireTeamId = dire.team_id;
+          const selectedTeamIdx = findTeamIndex(evtDireTeamId)
+          const dire_team = data.team_list[selectedTeamIdx]
+          if(dire_team.logo != null) dire_team.logo ='data:image/png;base64,' + dire_team.logo
+          dire_team_info.value = dire_team
+          if(!evtData.league.series_type) dire_team_info.value.series_wins = 0
+          loaded_team_logo_dire = true
+        }
+        else {
+          //default
+          dire_team_info.value = default_dire_info
         }
       }
-      else {
-        //default
-        radiant_team_info.value = {
-          name: "radiant",
-          tag: "RAD",
-          series_wins: 0
-        }
-      }
-
-      //dire team info
-      if (evtData.league && evtData.league.dire) {
-        const dire = evtData.league.dire
-        dire_team_info.value = {
-          name: dire.name,
-          tag: dire.team_tag.toUpperCase(),
-          series_wins: dire.series_wins
-        }
-      }
-      else {
-        //default
-        dire_team_info.value = {
-          name: "dire",
-          tag: "DIR",
-          series_wins: 0
-        }
-      }
+      
     }
 
   //END GENERAL INFO (Center Screen)
@@ -155,79 +172,7 @@ let firstPickTeam = $state("")
       }
     }
 
-    //method to show hero popup
-    //method 1 : drawback is some heroes will not popup because on GSI request client sometimes doesn't have picked hero in "previously" data
-    // uncomment to use this method 
-    // if (evtData.previously && evtData.previously.draft) {
-    //   let previousDraft = evtData.previously.draft;
-    //   let team_index = previousDraft.activeteam;
-    //   if (active_team) {
-    //     //either 2 (radiant) or 3 (dire)
-    //     let teamKey = `team${team_index}`;//'team '+ team_index;
-    //     let previousDraftState = previousDraft[teamKey]; // {pick0_id:"",pick0_class:""}
-
-    //     if (previousDraftState) {
-    //       let ispreviousPhaseIsPicking = false;
-    //       let pickedHeroKey = ""
-    //       Object.keys(previousDraftState).forEach((key) => {
-    //         if (key.includes("pick")) {
-    //           pickedHeroKey = key
-    //           ispreviousPhaseIsPicking = true
-    //           return;
-    //         }
-    //       })
-    //       //if previous event picking?
-    //       if (ispreviousPhaseIsPicking) {
-    //         announced_picked_hero.name = evtData.draft[teamKey][pickedHeroKey];
-    //         popup_visible.value = true;
-    //         setTimeout(() => {
-    //           popup_visible.value = false;
-    //         }, 6000)
-    //       }
-    //     }
-
-    //   }
-
-    // }
-    //end method 1
-
-
-    //method 2 : drawback is some heroes will popup overriding the previous animation because quick pick in 2nd pick phase (usualy tem pick 2 heroes and they pick as soon as after pick 1 hero)
-    // commonly happen on 2nd pick phase
-    // if(picking_order.length == 0) {     
-    // let draft_order = []
-    // //const is_radiant_fp = (evtData.draft && evtData.draft.team2.home_team);
-    // console.log('draft evt data:', JSON.stringify(evtData.draft))
-    // // console.log('is radiant first pick:', evtData.draft.team2.home_team)
-    // // console.log('is dire first pick:', evtData.draft.team3.home_team)
-    // captains_mode.draft.forEach((phase) => {
-    //     //only put pick selection in draft_order  
-    //     if(phase.name.includes("Pick phase", 0)){
-    //         phase.selections.forEach((selection) => {
-    //         //console.log('selection:', selection)
-    //         //const team = is_radiant_fp ? (selection.team === "first" ? "team2" : "team3") : (selection.team === "first" ? "team3" : "team2");
-    //         const team =(selection.team === "first" )? "team2" : "team3"
-    //         //console.log('is radiant first pick:', is_radiant_fp, ' selection team:', selection.team, ' team:', team)
-    //         const el_id = `${team}_${selection.type}${selection.id}`;
-    //         draft_order.push(el_id);
-    //       });
-    //     }       
-    //   });
-    //   picking_order = draft_order   
-    // }
-    // else{
-    //   //check current pick index for watching
-    //   for(const order in picking_order){
-    //     let po = picking_order[order].split("_") //split string team(x)_pick(n)
-    //     let current_team = po[0] //team2 or team3
-    //     let pick_index = po[1] +'_class' // added suffix class for checking key
-    //     if(evtData.draft[current_team][pick_index] == "") {
-    //       current_team_pick = picking_order[order]
-    //       break
-    //     }      
-    //   }    
-    // }
-    // end method 2
+  
 
     //method 3 : changes from  patch 7.40 where draft has update new rule (cannot rely on home team anymore and also adjust in game_mode.js file). Drawback still same as method 2 above
   if(picking_order.length == 0) {     
@@ -293,9 +238,6 @@ let firstPickTeam = $state("")
       }
     //end method 3
     
-  
-
-    // GENERAL INFO -- can be override by form match setting
     for (let i = 0; i <= 6; i++) {
 
       if (evtData.draft.team3) {
@@ -412,36 +354,35 @@ let firstPickTeam = $state("")
     console.warn('error happen, this might be the data not successfully parsed as from dota client might not send required data ', error)
   }
 
-});
+  });
 
 overlaySocket.on('settings:override', (data) =>{
-  // console.log('incoming command to change de draft overlay settings', data)
+   console.log('incoming command to change de draft overlay settings', data)
   if(data.override){
-    series_type.type = data.series
+    if(data.series)series_type.type = data.series
     if(!data.default_description) series_description.desc = data.series_description
-    dire_team_info.value = data.dire_team_info
-    radiant_team_info.value= data.radiant_team_info  
+      
     //set draft settings from dashboard
     setting_override.value = true
   }
   else{
     series_type.type = "bo3";
     series_description.desc = formatted_series_type(series_type.type)
-    dire_team_info.value = {
-          name: "dire",
-          tag: "DIR",
-          series_wins: 0
-        }
-
-    radiant_team_info.value= {
-          name: "radiant",
-          tag: "RAD",
-          series_wins: 0
-        }
     //revert back to dota client 
     setting_override.value = false
   }
   
+})
+
+overlaySocket.on('settings:override-team-info',(data) =>{
+  if(data.override){
+      radiant_team_info.value = data.radiant_team_info
+      dire_team_info.value = data.dire_team_info 
+      team_info_override.value = true
+  }
+  else{
+      team_info_override.value = false
+  }
 })
 
 overlaySocket.on('settings:toggle_music',() =>{
@@ -459,7 +400,7 @@ overlaySocket.on('settings:toggle_music',() =>{
           <HeroPick 
           hero_name={pick} 
           team="radiant" 
-          esport_team_tag={radiant_team_info.value.tag}
+          esport_team_logo={radiant_team_info.value.logo}
           choosen_heroes={radiant_choosen_heroes.values}
           />
         {/each}
@@ -490,7 +431,7 @@ overlaySocket.on('settings:toggle_music',() =>{
 		    {@const pick =  dire_picked_heroes.values[reverseIndex]}
           <HeroPick hero_name={pick} 
           team="dire" 
-          esport_team_tag={dire_team_info.value.tag}
+          esport_team_logo={dire_team_info.value.logo}
           choosen_heroes={dire_choosen_heroes.values}
           is_radiant={false}
           />

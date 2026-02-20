@@ -1,4 +1,36 @@
 @import "tailwindcss";
+@theme{
+    --bg-main: rgb(167 72 171);
+    --bg-main-peak: rgb(224, 184, 191);
+    --current-selection: rgb(192, 120, 191);
+    --current-selection-peak: rgb(86, 7, 139);
+    --blk-shadow: rgba(63, 7, 69, 0.75);
+    --wht-shadow: rgba(66, 48, 48, 0.75);
+    --player-name-bg: rgba(0, 0, 0, .5);
+    --white-text: rgb(230, 230, 230);
+    --color-radiant: rgb(19, 219, 19);
+    --color-dire: rgb(160, 8, 8);
+    --screen-width: 1920px;
+    --screen-height: 1080px;
+    --spacing-2k-width:var(--screen-width);
+    --spacing-2k-height:var(--screen-height);
+    --gradient-main : radial-gradient(circle at center,
+                    rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(125, 47, 163) 65%,   /* Mystic purple */
+                    rgb(80, 32, 124) 100%, /*,    /* Cosmic violet */
+                    rgb(42, 15, 85) 100% /*,     Deep purple */
+                    /*rgb(11, 10, 42) 100%     Midnight sky (edges)*/
+                    );
+                    
+    --gradient-main-linear:linear-gradient(0deg,                    
+					rgb(230, 184, 255) 0%,   /* Soft pink glow (center) */
+                    rgb(166, 73, 214) 30%,   /* Radiant magenta */
+                    rgb(42, 15, 85) 100% ,   /*  Deep purple */
+                    rgb(11, 10, 42) 100%    /* Midnight sky (edges)*/
+                  
+	);
+}
 
 html,
 body {
@@ -30,8 +62,7 @@ label {
   display: block;
 }
 
-/* input,
-button,
+input,
 select,
 textarea {
   font-family: inherit;
@@ -42,7 +73,7 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
-} */
+} 
 
 
 button:focus {

@@ -53,6 +53,7 @@ export async function POST(event){
 
     const game_event_data = {
         map         : requestdata.map,
+        league      : requestdata.league,
         building    : requestdata.building,
         player      : requestdata.player,
         hero        : requestdata.hero,
@@ -91,7 +92,7 @@ export async function POST(event){
             let heroes = {...game_event_data.hero.team2, ...game_event_data.hero.team3, ...{target_socket: targetSocket}}
             gsiSocket.emit('gsi-client:heroes',heroes)    
             const selected_player =  get_selected_player(heroes)        
-            gsiSocket.emit('gsi-client:players:selected', {...selected_player, ...{target_socket: targetSocket}})                  
+            gsiSocket.emit('gsi-client:players:selected', {selected_player, ...{target_socket: targetSocket}})                  
             gsiSocket.emit('gsi-client:items', {...game_event_data.items.team2, ... game_event_data.items.team3, ...{target_socket: targetSocket}})
             gsiSocket.emit('gsi-client:added',{ ...game_event_data.added,...{target_socket: targetSocket}})
             gsiSocket.emit('gsi-client:previously', {...game_event_data.previously,...{target_socket: targetSocket}})
@@ -110,6 +111,10 @@ export async function POST(event){
       //PLEASE ALSO UPDATE LISTENER IN server.js
     if(requestdata.roshan){
         gsiSocket.emit('gsi-client:roshan',{...requestdata.roshan, ...{target_socket: targetSocket}})
+    }
+
+    if(requestdata.league){
+        gsiSocket.emit('gsi-client:league',{...requestdata.league, ...{target_socket: targetSocket}})
     }
     //PLEASE ALSO UPDATE LISTENER IN server.js
     if(requestdata.events && requestdata.events.length > 0){

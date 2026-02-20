@@ -29,6 +29,8 @@ POSTGRE_DATABASE="dota_overlay"
 ENCRYPTION_KEY="random hash key => 2b9UP262LhJVSTklqAsoIA=="
 #the encryption key above is for encrypting password user
 CORS_ORIGIN="http://localhost:3001"
+BASE_URL="http://localhost:3000"
+SOCKET_IO_URL="http://localhost:3000"
 ```
 the random hash key above just a sample, you can generate it by your own
 
@@ -81,7 +83,7 @@ You can play/pause the music on the draft page. change the title of the match, o
 
 #### Ingame tab
 
-you can show/hide first blood overlay, roshan state and item timing when the match but this is automated (exclude roshan state) as player drew the first blood or buy specific items (e.g Black King bar or Daedalus). This feature is currenlty on development and not fully finished
+This overlay would show player portrait based on player data you input in dota-config, roshan state and item timing when the match but this is automated (exclude roshan state) as player drew the first blood or buy specific items (e.g Black King bar or Daedalus). This feature is currenlty on development and not fully finished
 
 #### Scoreboard tab
 
@@ -103,7 +105,7 @@ I acknowledge that I'm suck at design, I'm a back end programmer which prefer CL
 
 
 ### Hero Showcase Video
-This project actually include Hero showcase video when the heroes being picked. But due to file size (and also my hardwork of editing video that cost me time and experience), I only push demo text and one of my favorite hero which is Kez. (Honestly I'm suck playing this hero). If you want to have full of exclusive hero showcase video just hit me up and don't forget to buy me [coffee](#buy-me-a-coffee) 😊☕️. 
+This project actually include Hero showcase video when the heroes being picked. But due to file size (and also my hardwork of editing video that cost me time and experience), I only push demo text. If you want to have full of exclusive hero showcase video just hit me up and don't forget to buy me [coffee](#buy-me-a-coffee) 😊☕️. 
 
 ## Project Resource and credits
 

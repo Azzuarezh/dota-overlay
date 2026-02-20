@@ -99,11 +99,68 @@ textarea {
     text-decoration: none; 
 }
 
+
 .button-toggle-music:active {
     position: relative;
     top: 1px; /* Gives a subtle "pressed" effect */
     text-decoration: none; 
 }
+
+
+.button-override-settings {
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.button-override-settings:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    text-decoration: none; 
+}
+
+.button-override-settings:active{
+    position: relative;
+    top: 1px; /* Gives a subtle "pressed" effect */
+    text-decoration: none; 
+}
+
+
+.button-override-team-info {
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    text-decoration: none; 
+    border-radius: 5px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-family: 'Radiance';
+    font-weight: 800;
+    font-size: larger;
+}
+
+.button-override-team-info:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    text-decoration: none; 
+}
+
+.button-override-team-info:active{
+    position: relative;
+    top: 1px; /* Gives a subtle "pressed" effect */
+    text-decoration: none; 
+}
+
+
 
 .button-show-roshan-overlay {
     display: inline-block; 
@@ -163,10 +220,6 @@ textarea {
   margin-right: 15px; /* Adds space between the button and the file name text */
 }
 
-/* Add hover effects */
-.custom-file-input::file-selector-button:hover {
-  background-color: #0056b3;
-}
 
 
 /* do styling for dashboard overlays here */

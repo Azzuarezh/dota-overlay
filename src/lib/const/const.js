@@ -11,6 +11,32 @@ export const [GS_INIT, GS_WAIT, GS_DRAFT, GS_STRAT, GS_SHOW, GS_PRE, GS_INGAME, 
         "DOTA_GAMERULES_STATE_LAST",
         "DOTA_GAMERULES_STATE_DISCONNECT"
     ];
+
+export function translateGSCodeToText(gsCode){
+  switch(gsCode){
+    case GS_INIT:
+      return "Game initialized"
+    case GS_WAIT:
+      return "Wait"
+    case GS_DRAFT:
+      return "Drafting phase"
+    case GS_STRAT:
+      return "Strategy time"
+    case GS_SHOW:
+      return "Team Showcase"
+    case GS_PRE:
+      return "Pre game phase"
+    case GS_INGAME:
+      return "Game live"
+    case GS_POST:
+      return "Post Game"
+    case GS_LAST:
+      return "Game Last"
+    case GS_DC:
+      return "game Disconnected"
+  }
+}
+
   
 export const MATCH_SERIES = [
     {"label":"Best of 1","value":"bo1"},
@@ -68,7 +94,22 @@ gsiClientSocket.on('disconnect', (reason)=>{
   console.log(`Gamestate Integration disconnected. Reason ${reason}`)
 })
 
-
+export const mapRoleToString =(roleNum) =>{
+        switch (roleNum){
+            case 1:
+                return 'Safe lane'
+            case 2:
+                return 'Mid lane'
+            case 3:
+                return 'Off lane'
+            case 4:
+                return 'Soft support'
+            case 5:
+                return 'Hard support'
+            default:
+                return '-'
+        }
+    }
 
 export const socket = clientSocket
 export const gsiSocket = gsiClientSocket

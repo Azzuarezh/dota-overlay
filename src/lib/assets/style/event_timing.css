@@ -30,9 +30,7 @@
 body {
     width: var(--screen-width);
     height: var(--screen-height);
-    /*
-    position: absolute;
-    */
+    position:fixed;
     background-attachment: fixed;
     background-repeat: no-repeat;
     bottom: 0;

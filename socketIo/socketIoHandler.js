@@ -3,12 +3,14 @@ import { instrument } from '@socket.io/admin-ui';
 import {getUserById} from '../src/repository/models/Users/Users'
 import UserSessions from '../src/repository/models/Users/UserSessions';
 import {findGsiTokenByUserId, findGsiTokenByValue} from '../src/repository/models/Users/UserGsiToken';
+import dotenv from 'dotenv'
+dotenv.config()
 export default function injectSocketIO(server) {
 	// ---- Socket.IO setup ----
     const io = new Server(server,
         {
         cors: {
-          origin: ["http://localhost:3001"],
+          origin: [process.env.SOCKET_IO_URL || 'http://localhost:3001'],
           credentials:true
         }, 
         connectionStateRecovery:{// the backup duration of the sessions and the packets
@@ -128,6 +130,16 @@ export default function injectSocketIO(server) {
           }
       });
 
+      socket.on('gsi-client:league', (data) => { 
+        const target_socket = data.target_socket
+          try{
+            io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('league',data)
+          }catch(err){
+            console.log(err)
+          }
+      });
+
+
       socket.on('gsi-client:events', (data) => { 
         const target_socket = data.target_socket
           try{
@@ -137,6 +149,7 @@ export default function injectSocketIO(server) {
           }
       });
       socket.on('gsi-client:players',(data) =>  { 
+        // console.log('players: from gsi client:', data)
         const target_socket = data.target_socket
           try{
             io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('players',data)
@@ -196,6 +209,17 @@ export default function injectSocketIO(server) {
         delete exclude_target_socket.target_socket
         try{
           io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:override', exclude_target_socket)
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+      socket.on('overlay-client:team-info-override',(data)=>{
+        const target_socket = data.target_socket
+        const exclude_target_socket = data
+        delete exclude_target_socket.target_socket
+        try{
+          io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:override-team-info', exclude_target_socket)
         }catch(err){
           console.log(err)
         }
