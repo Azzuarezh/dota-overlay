@@ -1,4 +1,3 @@
-
 import {getDotaTeams} from '../../../../repository/models/Dota/team/DotaTeams'
 import { env } from '$env/dynamic/private';
 /** @type {import('./$types').PageServerLoad} */

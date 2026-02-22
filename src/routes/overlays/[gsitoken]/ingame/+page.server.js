@@ -1,7 +1,13 @@
-
+import {getDotaTeams} from '../../../../repository/models/Dota/team/DotaTeams'
 import { env } from '$env/dynamic/private';
+
 /** @type {import('./$types').PageServerLoad} */
-export function load({params}) {
+export async function load({params}) {
+
+	let dotaTeams = await getDotaTeams()
+	dotaTeams.forEach(t =>{
+		if(t.logo != null) t.logo = t.logo.toString('base64');
+	})
 	return{
 		gsi_token:params.gsitoken,
 		roshan_overlay_visible: false,
@@ -18,6 +24,9 @@ export function load({params}) {
 		player7:{accountId:null,name:null,avatarPicture:null,isExistInDb:false, alreadyMounted:false},
 		player8:{accountId:null,name:null,avatarPicture:null,isExistInDb:false, alreadyMounted:false},
 		player9:{accountId:null,name:null,avatarPicture:null,isExistInDb:false, alreadyMounted:false},
+		team_list: JSON.parse(JSON.stringify(dotaTeams)),
+		radiant_team_info:{ tag:'RAD', name:'radiant', logo:'/resources/image_style/default_team_logo.png', default:true},
+		dire_team_info:{ tag:'DIR',name:'dire', logo:'/resources/image_style/default_team_logo.png',default:true},
 		BASE_URL:(env.BASE_URL)?env.BASE_URL:'http://localhost:3000',
 		SOCKET_IO_URL:(env.SOCKET_IO_URL)?env.SOCKET_IO_URL:'http://localhost:3000'
 	}

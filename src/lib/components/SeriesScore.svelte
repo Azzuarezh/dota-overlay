@@ -3,18 +3,23 @@
     import { faSquare } from "@fortawesome/free-regular-svg-icons";
     import { faSquare as solidSquare} from "@fortawesome/free-solid-svg-icons";
 
-    export let series_type;
-    export let score;
-    export let reverse_order = false;
+    let {series_type = $bindable(), score =$bindable(), reverse_order = false} = $props()
 </script>
 
 {#if reverse_order}
+ <!-- dire  -->
   {#if series_type =="bo1" }
         {#if score == 0}
           <FontAwesomeIcon icon={faSquare} size="1x" />
         {:else}
          <FontAwesomeIcon icon={solidSquare} size="1x" />
         {/if}
+  {:else if series_type == "bo2"}
+        {#if score == 0}
+          <FontAwesomeIcon icon={faSquare} size="1x" />
+        {:else}
+         <FontAwesomeIcon icon={solidSquare} size="1x" />
+        {/if} 
   {:else if series_type == "bo3"}
           {#if score == 0}
             <FontAwesomeIcon icon={faSquare} size="1x" />
@@ -46,12 +51,19 @@
           {/if}
   {/if}
 {:else}
+<!-- radiant -->
   {#if series_type =="bo1" }
         {#if score == 0}
           <FontAwesomeIcon icon={faSquare} size="1x" /> 
         {:else}
          <FontAwesomeIcon icon={solidSquare} size="1x" /> 
         {/if}
+  {:else if series_type == "bo2"}
+        {#if score == 0}
+          <FontAwesomeIcon icon={faSquare} size="1x" />
+        {:else}
+         <FontAwesomeIcon icon={solidSquare} size="1x" />
+        {/if}       
   {:else if series_type == "bo3"}
           {#if score == 0}
             <FontAwesomeIcon icon={faSquare} size="1x" /> <!-- 0-->

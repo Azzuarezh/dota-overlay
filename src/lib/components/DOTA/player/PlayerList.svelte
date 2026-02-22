@@ -186,14 +186,14 @@
                         <td class="px-4 text-left py-2 border-1 font-bold">{row.accountId}</td>
                         <td class="px-4 text-left py-2 border-1 font-bold"><a href={`/dashboard/dota-config/player/${row.id}`}>{row.name}</a> </td>
                         <td class="px-4 text-left py-2 border-1 font-bold">{mapRoleToString(row.rolePosition)}</td>	
-                            <td class="px-4 text-left py-2 border-1 font-bold">
+                        <td class="px-4 text-left py-2 border-1 font-bold">
                             <button class="text-white text-md rounded-sm p-2 bg-red-600  hover:bg-red-700" onclick={() => handleDeletePlayer(row.id)}>Delete</button>
-                            </td>	
+                        </td>	
                     </tr>
                 {/each}
                 {:else}
                 <tr>
-                    <td colspan="3" class="px-4 py-2 border-1 text-2xl text-center">There is no record for teams yet. </td>
+                    <td colspan="5" class="px-4 py-2 border-1 text-2xl text-center">There is no record for teams yet. </td>
                 </tr>
                 {/if}
             </tbody>

@@ -52,9 +52,10 @@ export async function POST(event){
     }
 
     const game_event_data = {
+        provider    : requestdata.provider,
         map         : requestdata.map,
         league      : requestdata.league,
-        building    : requestdata.building,
+        buildings   : requestdata.buildings,
         player      : requestdata.player,
         hero        : requestdata.hero,
         items       : requestdata.items,
@@ -69,13 +70,15 @@ export async function POST(event){
    
     if(requestdata.map){
         //PLEASE ALSO UPDATE LISTENER IN server.io
+
+        //event to check game time and clock time
         gsiSocket.emit('gsi-client:time', {
             game_state : requestdata.map.game_state,
             game_time  : formatTime(requestdata.map.game_time),
             clock_time : formatTime(requestdata.map.clock_time),
             target_socket: targetSocket
         })
-
+       
     switch (requestdata.map.game_state) {
         case GS_DRAFT:
             gsiSocket.emit('gsi-client:draft',draft_data)
@@ -88,11 +91,15 @@ export async function POST(event){
             break;
         case GS_INGAME:
             gsiSocket.emit('gsi-client:ingame',game_event_data)
-            gsiSocket.emit('gsi-client:players', {...game_event_data.player.team2, ...game_event_data.player.team3, ...{target_socket: targetSocket}})
-            let heroes = {...game_event_data.hero.team2, ...game_event_data.hero.team3, ...{target_socket: targetSocket}}
-            gsiSocket.emit('gsi-client:heroes',heroes)    
-            const selected_player =  get_selected_player(heroes)        
-            gsiSocket.emit('gsi-client:players:selected', {selected_player, ...{target_socket: targetSocket}})                  
+              
+            //only send event player when game state is ingame to avoid not finding player account id
+            if(requestdata.player){
+                //show player in the match
+                gsiSocket.emit('gsi-client:players', {...requestdata.player.team2, ...requestdata.player.team3, ...{target_socket: targetSocket}})
+
+            }
+
+
             gsiSocket.emit('gsi-client:items', {...game_event_data.items.team2, ... game_event_data.items.team3, ...{target_socket: targetSocket}})
             gsiSocket.emit('gsi-client:added',{ ...game_event_data.added,...{target_socket: targetSocket}})
             gsiSocket.emit('gsi-client:previously', {...game_event_data.previously,...{target_socket: targetSocket}})
@@ -107,6 +114,11 @@ export async function POST(event){
             gsiSocket.emit('gsi-client:disconnect', {target_socket: targetSocket})
             break;
             }
+
+        let heroes = {...game_event_data.hero.team2, ...game_event_data.hero.team3, ...{target_socket: targetSocket}}
+        gsiSocket.emit('gsi-client:heroes',heroes)    
+        const selected_player =  get_selected_player(heroes)        
+        gsiSocket.emit('gsi-client:players:selected', {selected_player, ...{target_socket: targetSocket}})
     }
       //PLEASE ALSO UPDATE LISTENER IN server.js
     if(requestdata.roshan){
@@ -122,7 +134,6 @@ export async function POST(event){
         gameEvt.forEach((evt)=>{evt.game_time = evt.game_time})
         gsiSocket.emit('gsi-client:events',{...gameEvt, ...{target_socket: targetSocket}})
     }
-
      //this just to check whether gsi client is connected before it disconnected (breath check)
     gsiSocket.emit('gsi-client:ping',{
             target_socket: targetSocket

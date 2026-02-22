@@ -205,7 +205,7 @@
         "provider"      "1"
         "league"        "1"
         "map"           "1"
-        "building"      "1"
+        "buildings"     "1"
         "events"        "1"
         "roshan"        "1"
         "couriers"      "1"

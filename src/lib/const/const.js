@@ -40,6 +40,7 @@ export function translateGSCodeToText(gsCode){
   
 export const MATCH_SERIES = [
     {"label":"Best of 1","value":"bo1"},
+    {"label":"Best of 2","value":"bo2"},
     {"label":"Best of 3","value":"bo3"},
     {"label":"Best of 5","value":"bo5"}
   ];

@@ -88,6 +88,8 @@
           override:true,
           series: (default_series)?null:selected_series,
           series_description:(default_description)?null:manual_description,
+          default_series: default_series,
+          default_description:default_description,
           radiant_score: (default_series)?null:radiant_score ,
           dire_score: (default_series)?null:dire_score,
           target_socket:target_socket
@@ -190,7 +192,7 @@
               bind:value={selected_series} disabled={default_series}
             >
             <option value="" disabled>
-                  Choose between Best of 1, 3, or 5
+                  Choose between Best of 1, 2, 3, or 5
                   </option>
               {#each MATCH_SERIES as serial}
                   <option value={serial.value}>

@@ -13,96 +13,133 @@
     data.socket.emit('overlay-client:toggle_show_roshan', {target_socket: target_socket})
   }
 
+  function show_hide_team_logo_hud(){
+    data.socket.emit('overlay-client:toggle_show_team_logo_hud', {target_socket: target_socket})
+  }
+
+  function show_hide_win_probability(){
+    data.socket.emit('overlay-client:toggle_show_win_probability', {target_socket: target_socket})
+  }
+
 
 </script>
 <div>
   <h1 class="font-[radiance] text-2xl">In-game Actions</h1> 
- <a class="button-goto-overlay"
-    data-sveltekit-preload-data="false" href={data.overlay_page_url} target="_blank">Open overlay page</a>
-     <button class="button-show-roshan-overlay" onclick={show_hide_roshan_overlay}>Toggle Show/Hide Roshan Overlay</button>
+    <a class="button-goto-overlay"
+        data-sveltekit-preload-data="false" href={data.overlay_page_url} target="_blank">Open overlay page</a>
+     <button class="button-show-roshan-overlay" onclick={show_hide_roshan_overlay}>Show/Hide Roshan Overlay</button>
+     <button class="button-show-roshan-overlay" onclick={show_hide_team_logo_hud}>Show/Hide Team logo hud</button>
+     <button class="button-show-roshan-overlay" onclick={show_hide_win_probability}>Show/Hide Win Probability</button>
 </div>
     <!-- Toggle Show/Hide Match Setting -->
     <div class="w-full" >
-      <div class="grid my-4 py-5">
-        <h1 class="font-bold uppercase text-xl">Show Roshan Overlay</h1>
-        <div class="pt-1 text-lg">below is the sample roshan overlays animation</div>
-       
-      </div>
-      <div class="my-10 border-b border-gray-100 place-content-center">
-        <div class="bg-gray-800/30 p-3">           
-            <div class="grid grid-cols-2 w-full place-items-center">
-                <div>
-                    <h1 class="text-4xl font-[radiance]">Sample Roshan Alive</h1>
+        <div class="grid my-4 py-5">
+            <h1 class="font-bold uppercase text-xl">Show Roshan Overlay</h1>
+            <div class="pt-1 text-lg">below is the sample roshan overlays animation when it toggled</div>      
+        </div>
+        <div class="my-10 border-b border-gray-100 place-content-center">
+            <div class="bg-gray-800/30 p-3">           
+                <div class="grid grid-cols-2 w-full place-items-center">
+                    <div>
+                        <h1 class="text-4xl font-[radiance]">Sample Roshan Alive</h1>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-[radiance]">Sample Roshan Timer</h1>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-4xl font-[radiance]">Sample Roshan Timer</h1>
+                
+                <div class="grid grid-cols-2 w-full gap-4">
+                    <div class="roshan border-1 rounded-lg p-5 flex flex-row space-x-2">                  
+                        <!-- Roshan Alive -->
+                        <div class="basis-50 place-content-center justify-items-center-safe rounded-l">
+                            <video autoplay muted loop class="items-center rounded-xl scale-[500%]">
+                                    <source type="video/webm" src={asset(`/resources/roshan_animation.webm`)} />
+                            </video>                
+                        </div>
+                        <div class="wrapper">
+                        <!-- roshan item -->
+                            <div class="basis-80 bg-gray-800/50 grid grid-rows-2 space-y-1 rounded-lg p-4">
+                                <div class="grid grid-cols-3 space-x-2">
+                                    <div id="item-slot1" class="bg-gray-800 rounded-xl">
+                                        <img alt="BKB" src={asset(`/resources/items/item_aegis.png`)} class="rounded-xl"/>
+                                    </div>
+                                    <div id="item-slot2" class="bg-gray-900 rounded-xl">
+                                        <img alt="BKB" src={asset(`/resources/items/item_roshans_banner.png`)} class="rounded-xl" 
+                                        onerror={(e) => e.target.classList = "hidden"}/>
+                                    </div>
+                                    <div id="item-slot3" class="bg-gray-900 rounded-xl">
+                                        <img alt="BKB" src={asset(`/resources/items/item_refresher_shard.png`)} 
+                                        onerror={(e) => e.target.classList = "hidden"}/>
+                                    </div>   
+                                </div>
+                                <div class="grid grid-cols-3 space-x-2">
+                                    <div id="item-slot4" class="bg-gray-900 rounded-xl">
+                                        <img alt="BKB" src={asset(`/resources/items/item_cheese.png`)} class="rounded-xl"
+                                        onerror={(e) => e.target.classList = "hidden"}
+                                        />
+                                    </div>
+                                    <div id="item-slot5" class="bg-gray-900 rounded-xl">
+                                        <!-- <img alt="BKB" src={asset(`/resources/items/item_null.png`)} class="rounded-xl"
+                                        onerror={(e) => e.target.classList = "hidden"}
+                                        /> -->
+                                    </div>
+                                    <div id="item-slot6" class="bg-gray-900 rounded-xl">
+                                        <!-- <img alt="BKB" src={asset(`/resources/items/item_null.png`)} class="rounded-xl"
+                                        onerror={(e) => e.target.classList = "hidden"} 
+                                        /> -->
+                                    </div>   
+                                </div>                 
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="roshan border-1 rounded-lg p-5 flex flex-row space-x-2">
+                        <!-- Roshan Cooldown -->
+                        <div class="basis-50 place-content-center justify-items-center-safe rounded-l">
+                            <div class="grid grid-rows-2">
+                                <video autoplay muted loop class="items-center rounded-xl scale-[500%]">
+                                    <source type="video/webm" src={asset(`/resources/roshan_animation.webm`)} />
+                                </video> 
+                            </div>                   
+                        </div>
+                        <div class="wrapper">
+                        <!-- roshan item -->
+                            <div class="w-full h-[60%] place-items-center place-content-center">
+                                <h1 class="text-amber-600 font-[radiance] text-5xl font-extrabold">Roshan Respawn at: 00:00</h1>              
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
             
-            <div class="grid grid-cols-2 w-full gap-4">
-                <div class="roshan border-1 rounded-lg p-5 flex flex-row space-x-2">                  
-                    <!-- Roshan Alive -->
-                    <div class="basis-50 place-content-center justify-items-center-safe rounded-l">
-                        <video autoplay muted loop class="items-center rounded-xl scale-[500%]">
-                                <source type="video/webm" src={asset(`/resources/roshan_animation.webm`)} />
-                        </video>                
-                    </div>
-                    <div class="wrapper">
-                    <!-- roshan item -->
-                        <div class="basis-80 bg-gray-800/50 grid grid-rows-2 space-y-1 rounded-lg p-4">
-                            <div class="grid grid-cols-3 space-x-2">
-                                <div id="item-slot1" class="bg-gray-800 rounded-xl">
-                                    <img alt="BKB" src={asset(`/resources/items/item_aegis.png`)} class="rounded-xl"/>
-                                </div>
-                                <div id="item-slot2" class="bg-gray-900 rounded-xl">
-                                    <img alt="BKB" src={asset(`/resources/items/item_roshans_banner.png`)} class="rounded-xl" 
-                                    onerror={(e) => e.target.classList = "hidden"}/>
-                                </div>
-                                <div id="item-slot3" class="bg-gray-900 rounded-xl">
-                                    <img alt="BKB" src={asset(`/resources/items/item_refresher_shard.png`)} 
-                                    onerror={(e) => e.target.classList = "hidden"}/>
-                                </div>   
-                            </div>
-                            <div class="grid grid-cols-3 space-x-2">
-                                <div id="item-slot4" class="bg-gray-900 rounded-xl">
-                                    <img alt="BKB" src={asset(`/resources/items/item_cheese.png`)} class="rounded-xl"
-                                    onerror={(e) => e.target.classList = "hidden"}
-                                    />
-                                </div>
-                                <div id="item-slot5" class="bg-gray-900 rounded-xl">
-                                    <!-- <img alt="BKB" src={asset(`/resources/items/item_null.png`)} class="rounded-xl"
-                                    onerror={(e) => e.target.classList = "hidden"}
-                                    /> -->
-                                </div>
-                                <div id="item-slot6" class="bg-gray-900 rounded-xl">
-                                    <!-- <img alt="BKB" src={asset(`/resources/items/item_null.png`)} class="rounded-xl"
-                                    onerror={(e) => e.target.classList = "hidden"} 
-                                    /> -->
-                                </div>   
-                            </div>                 
-                        </div>
-                    </div> 
-                </div>
-                <div class="roshan border-1 rounded-lg p-5 flex flex-row space-x-2">
-                    <!-- Roshan Cooldown -->
-                    <div class="basis-50 place-content-center justify-items-center-safe rounded-l">
-                        <div class="grid grid-rows-2">
-                            <video autoplay muted loop class="items-center rounded-xl scale-[500%]">
-                                <source type="video/webm" src={asset(`/resources/roshan_animation.webm`)} />
-                            </video> 
-                        </div>                   
-                    </div>
-                    <div class="wrapper">
-                    <!-- roshan item -->
-                         <div class="w-full h-[60%] place-items-center place-content-center">
-                            <h1 class="text-amber-600 font-[radiance] text-5xl font-extrabold">Roshan Respawn at: 00:00</h1>              
-                        </div>
-                    </div> 
-                </div>
-            </div>
         </div>
-         
-      </div>
+         <div class="py-2 mt-30">
+            <h1 class="font-bold uppercase text-2xl">Team Logo Hud</h1>
+            <div class="pt-1 text-lg">Sometimes team logo doesn't appear in dota client when the team is not a Professional teams. But we can add the logo based team which we add in dota-config page.<br/>
+                below is the sample of team logo hud:
+                 <img src={asset('/resources/image_style/team_logo_hud.png')}  alt="team logo hud"/>
+            </div>
+             
+        </div>
+        <div class="py-2 mt-10">
+            <h1 class="font-bold uppercase text-2xl">Win Probability</h1>
+            <div class="pt-1 text-lg">below is the sample win probability overlays animation</div>
+             <img src={asset('/resources/image_style/win_probability.png')}  alt="win probability"/>
+             <div class="pt-1 text-lg mb-">
+                The calculation for win probability is not as perfect as Dota plus but this might help to determine which team is leading. <br/>
+                for the formula, below described how to calculate win probability: <br/>
+                <pre class="border-1 border-gray-400 rounded-xl mt-4">
+                We weight the NW lead heavily. Tower diff acts as a 1000 gold "momentum" swing.
+                totalAdvantage = nwLead + (towerDiff * 1000);
+
+                Sigmoid Curve (S-Curve)
+                sensitivity: how "reactive" the percentage is. 
+                We decrease sensitivity as game time increases so 5k lead late-game isn't 90%.
+                sensitivity = 0.0002 / (1 + (gameTimeMin / 40));
+                radiantWinProb = 1 / (1 + Math.exp(-totalAdvantage * sensitivity));
+                </pre>
+             </div>
+        </div>
+
       <div class="py-2 mt-20">
         <h1 class="font-bold uppercase text-2xl">Player Items (Under development)</h1>
         <p class="font-bold text-xl">This feature plan will show item timing each player. This is currently a mock up preview. Nothing happen in the overlay, also it can be used for Post game statistics.</p>

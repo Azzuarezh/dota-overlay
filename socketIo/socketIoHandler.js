@@ -237,6 +237,7 @@ export default function injectSocketIO(server) {
 
       socket.on('overlay-client:toggle_show_roshan',(data)=>{
         console.log('event settings show roshan overlay received')
+        console.log('event settings show roshan overlay received')
         const target_socket = data.target_socket
         try{
           io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:toggle_show_roshan')
@@ -244,6 +245,31 @@ export default function injectSocketIO(server) {
           console.log(err)
         }
       })
+
+
+      socket.on('overlay-client:toggle_show_team_logo_hud',(data)=>{
+        console.log('event settings show team logo hud overlay received')
+        const target_socket = data.target_socket
+        try{
+          io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:toggle_show_team_logo_hud')
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+      socket.on('overlay-client:toggle_show_win_probability',(data)=>{
+        console.log('event settings show win probability overlay received')
+        const target_socket = data.target_socket
+        try{
+          io.to(`user:${target_socket.userId}:gsi_client_id:${target_socket.gsi_client_id}`).emit('settings:toggle_show_win_probability')
+        }catch(err){
+          console.log(err)
+        }
+      })
+
+
+
+
   
     
     });

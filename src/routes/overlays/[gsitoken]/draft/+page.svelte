@@ -52,12 +52,15 @@ let popup_visible = $state({ value: data.popup_visible })
 let loaded_team_logo_radiant = $state(false)
 let loaded_team_logo_dire = $state(false)
 
-
+let radiant_wins = $state({value:0})
+let dire_wins = $state({value:0})
 
 export const formatted_series_type = (series) => {
     switch (series) {
       case "bo1":
         return "BEST OF 1";
+      case "bo2":
+        return "BEST OF 2";
       case "bo3":
         return "BEST OF 3";
       case "bo5":
@@ -92,53 +95,44 @@ let firstPickTeam = $state("")
     draft_active_time_remaining.value = (evtData.draft.activeteam_time_remaining)? evtData.draft.activeteam_time_remaining : 0;
     radiant_bonus_time.value = (evtData.draft.radiant_bonus_time)?evtData.draft.radiant_bonus_time : 0;
     dire_bonus_time.value = (evtData.draft.dire_bonus_time)?evtData.draft.dire_bonus_time : 0;
-    
+    radiant_wins.value = evtData.league.radiant.series_wins 
+    dire_wins.value = evtData.league.dire.series_wins
     // GENERAL INFO (Center Screen)
     //series type (bo1/bo3/bo5 etc)
     series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "bo1";
     series_description.desc = (setting_override.value)?series_description.desc:formatted_series_type(series_type.type)
+
     active_team.name = evtData.draft.activeteam === 2 ? "radiant" : "dire";
     turn.value = active_team.name
     if (team_info_override.value == false) {
       //to ensure the event not fired everytime draft update, add flag loaded team logo
-      if(!loaded_team_logo_radiant){
+      if(loaded_team_logo_radiant == false){
         //radiant team info
         if (evtData.league && evtData.league.radiant) {
           const radiant = evtData.league.radiant
           const evtRadiantTeamId = radiant.team_id;
           const selectedTeamIdx = findTeamIndex(evtRadiantTeamId)
-          const radiant_team = data.team_list[selectedTeamIdx]
+          let radiant_team = data.team_list[selectedTeamIdx]
           if(radiant_team.logo != null) radiant_team.logo ='data:image/png;base64,' + radiant_team.logo
           radiant_team_info.value = radiant_team
-          if(!evtData.league.series_type) radiant_team_info.value.series_wins = 0
           loaded_team_logo_radiant = true
         }
-        else {
-          //default
-          radiant_team_info.value = default_radiant_info
-        }
-
       }
       
-      
-      if(!loaded_team_logo_dire){
-        //dire team info
-        
+      if(loaded_team_logo_dire == false){
+        //dire team info        
         if (evtData.league && evtData.league.dire) {
+          const dire_score = evtData.league.dire.series_wins
           const dire = evtData.league.dire
           const evtDireTeamId = dire.team_id;
           const selectedTeamIdx = findTeamIndex(evtDireTeamId)
-          const dire_team = data.team_list[selectedTeamIdx]
+          let dire_team = data.team_list[selectedTeamIdx]
           if(dire_team.logo != null) dire_team.logo ='data:image/png;base64,' + dire_team.logo
           dire_team_info.value = dire_team
-          if(!evtData.league.series_type) dire_team_info.value.series_wins = 0
           loaded_team_logo_dire = true
-        }
-        else {
-          //default
-          dire_team_info.value = default_dire_info
-        }
+        } 
       }
+      
       
     }
 
@@ -417,11 +411,14 @@ overlaySocket.on('settings:toggle_music',() =>{
     dire_bonus_time={dire_bonus_time.value}
     turn={active_team.name.value}
     phase={phase.value}
-    draft_ended={draft_ended.value}
+    bind:draft_ended={draft_ended.value}
     radiant_team_info={radiant_team_info.value}
     dire_team_info={dire_team_info.value}
     series_type={series_type.type}
     series_description={series_description.desc}
+    bind:radiant_wins={radiant_wins}
+    bind:dire_wins={dire_wins}
+
   />
   <div class="side_container">
     <!-- normal order (Left to Right)-->

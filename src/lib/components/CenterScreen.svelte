@@ -1,20 +1,24 @@
 <script>
-  export let activeteam_time_remaining;
-  export let radiant_bonus_time;
-  export let dire_bonus_time;
-  export let turn;
-  export let phase;
-  export let draft_ended;
-  export let radiant_team_info;
-  export let dire_team_info;
-  export let series_type;
-  export let series_description;
+  let {
+    activeteam_time_remaining,
+    radiant_bonus_time,
+    dire_bonus_time,
+    turn,
+    phase,
+    draft_ended = $bindable(),
+    radiant_team_info,
+    dire_team_info,
+    series_type,
+    series_description,
+    radiant_wins = $bindable(),
+    dire_wins = $bindable()
+  } = $props()
+
   import SeriesScore from "./SeriesScore.svelte";
   import TeamLogo from "./TeamLogo.svelte";
 
   import {formatTime} from '$lib/const/const.js'
   import { asset } from "$app/paths";
- 
 </script>
 
 <div
@@ -23,11 +27,12 @@
 >
   <div id="scorebar_spacer" class="flex justify-evenly">   
     <div id="radiant_score">
-      <SeriesScore series_type={series_type} score={radiant_team_info.series_wins} />
+      <!-- <SeriesScore bind:series_type={series_type} bind:score={radiant_wins.value} /> -->
+       <SeriesScore bind:series_type={series_type} bind:score={radiant_wins.value} />
     </div>
      <span class="text-lg series-tag">{series_description}</span>
     <div id=dire_score>
-      <SeriesScore series_type={series_type} score={dire_team_info.series_wins} reverse_order={true}/>
+      <SeriesScore bind:series_type={series_type} bind:score={dire_wins.value} reverse_order={true}/>
     </div>
   </div>
   <div class="current_selection item-center px-4">

@@ -135,3 +135,25 @@
 	font-weight: bold;
 	font-style: normal;
 }
+
+@font-face {
+	font-family: 'CinzelDecorative-Black';
+	src: url('/resources/fonts/CinzelDecorative-Black.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'CinzelDecorative-Bold';
+	src: url('/resources/fonts/CinzelDecorative-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CinzelDecorative-regular';
+	src: url('/resources/fonts/CinzelDecorative-Bold.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
