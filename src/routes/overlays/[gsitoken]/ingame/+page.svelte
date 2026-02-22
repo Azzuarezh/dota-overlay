@@ -606,7 +606,7 @@ onclick={() => {first_blood_overlay_visible = true; setTimeout(()=>{first_blood_
 onclick={() => win_probability_overlay_visible = !win_probability_overlay_visible} >Show/Hide win probability overlay</button > 
 <style>
     .guide{
-        background-image : url('/resources/ingame-overlay-guide.png');
+        /* background-image : url('/resources/ingame-overlay-guide.png'); */
         opacity: 1;
     }
 </style>
