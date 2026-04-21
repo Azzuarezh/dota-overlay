@@ -23,8 +23,6 @@
  let draft_ended = $state({ value: data.draft_ended });
  let turn = $state({ value: data.turn });
 
-
-
  const default_radiant_info =data.radiant_team_info
  const default_dire_info = data.dire_team_info 
 
@@ -131,9 +129,7 @@ let firstPickTeam = $state("")
           dire_team_info.value = dire_team
           loaded_team_logo_dire = true
         } 
-      }
-      
-      
+      }            
     }
 
   //END GENERAL INFO (Center Screen)
@@ -409,7 +405,7 @@ overlaySocket.on('settings:toggle_music',() =>{
     activeteam_time_remaining={draft_active_time_remaining.value}
     radiant_bonus_time={radiant_bonus_time.value}
     dire_bonus_time={dire_bonus_time.value}
-    turn={active_team.name.value}
+    turn={turn.value}
     phase={phase.value}
     bind:draft_ended={draft_ended.value}
     radiant_team_info={radiant_team_info.value}

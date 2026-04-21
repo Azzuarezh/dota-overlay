@@ -19,15 +19,14 @@
 
   import {formatTime} from '$lib/const/const.js'
   import { asset } from "$app/paths";
-</script>
 
+</script>
 <div
   class="info rounded-xl {draft_ended ?'with_logo':''}"
   id="center_info"
 >
   <div id="scorebar_spacer" class="flex justify-evenly">   
     <div id="radiant_score">
-      <!-- <SeriesScore bind:series_type={series_type} bind:score={radiant_wins.value} /> -->
        <SeriesScore bind:series_type={series_type} bind:score={radiant_wins.value} />
     </div>
      <span class="text-lg series-tag">{series_description}</span>
