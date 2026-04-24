@@ -93,8 +93,8 @@ let firstPickTeam = $state("")
     draft_active_time_remaining.value = (evtData.draft.activeteam_time_remaining)? evtData.draft.activeteam_time_remaining : 0;
     radiant_bonus_time.value = (evtData.draft.radiant_bonus_time)?evtData.draft.radiant_bonus_time : 0;
     dire_bonus_time.value = (evtData.draft.dire_bonus_time)?evtData.draft.dire_bonus_time : 0;
-    radiant_wins.value = evtData.league.radiant.series_wins 
-    dire_wins.value = evtData.league.dire.series_wins
+    radiant_wins.value = (evtData.league && evtData.league.radiant) ? evtData.league.radiant.series_wins : 0;
+    dire_wins.value = (evtData.league && evtData.league.dire) ? evtData.league.dire.series_wins : 0;
     // GENERAL INFO (Center Screen)
     //series type (bo1/bo3/bo5 etc)
     series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "bo1";
@@ -115,12 +115,14 @@ let firstPickTeam = $state("")
           radiant_team_info.value = radiant_team
           loaded_team_logo_radiant = true
         }
+        else{
+          radiant_team_info.value = default_radiant_info
+        }
       }
       
       if(loaded_team_logo_dire == false){
         //dire team info        
         if (evtData.league && evtData.league.dire) {
-          const dire_score = evtData.league.dire.series_wins
           const dire = evtData.league.dire
           const evtDireTeamId = dire.team_id;
           const selectedTeamIdx = findTeamIndex(evtDireTeamId)
@@ -129,6 +131,9 @@ let firstPickTeam = $state("")
           dire_team_info.value = dire_team
           loaded_team_logo_dire = true
         } 
+        else{
+          dire_team_info.value = default_dire_info
+        }
       }            
     }
 
