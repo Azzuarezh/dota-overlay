@@ -90,15 +90,22 @@ let firstPickTeam = $state("")
 
   overlaySocket.on("gamestate:draft", (evtData) => {
   try{
+
+    console.log('radiant wins before override (should be from dota client):', radiant_wins.value, ' dire wins before override (should be from dota client):', dire_wins.value) 
     draft_active_time_remaining.value = (evtData.draft.activeteam_time_remaining)? evtData.draft.activeteam_time_remaining : 0;
     radiant_bonus_time.value = (evtData.draft.radiant_bonus_time)?evtData.draft.radiant_bonus_time : 0;
     dire_bonus_time.value = (evtData.draft.dire_bonus_time)?evtData.draft.dire_bonus_time : 0;
-    radiant_wins.value = (evtData.league && evtData.league.radiant) ? evtData.league.radiant.series_wins : 0;
-    dire_wins.value = (evtData.league && evtData.league.dire) ? evtData.league.dire.series_wins : 0;
     // GENERAL INFO (Center Screen)
-    //series type (bo1/bo3/bo5 etc)
-    series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "bo1";
-    series_description.desc = (setting_override.value)?series_description.desc:formatted_series_type(series_type.type)
+    //series type (bo1/bo3/bo5 etc) and series description (custom text from dashboard or default text based on series type)
+    if(!setting_override.value){
+      //only update score if not override from dashboard, to prevent the score keep change every draft update from dota client 
+      series_type.type = (evtData.league && evtData.league.series_type) ? evtData.league.series_type : "bo1";
+      series_description.desc = (setting_override.value)?series_description.desc:formatted_series_type(series_type.type)
+      radiant_wins.value = (evtData.league && evtData.league.radiant) ? evtData.league.radiant.series_wins : 0;
+      dire_wins.value = (evtData.league && evtData.league.dire) ? evtData.league.dire.series_wins : 0; 
+    }
+    
+    
 
     active_team.name = evtData.draft.activeteam === 2 ? "radiant" : "dire";
     turn.value = active_team.name
@@ -352,11 +359,15 @@ let firstPickTeam = $state("")
   });
 
 overlaySocket.on('settings:override', (data) =>{
-   console.log('incoming command to change de draft overlay settings', data)
   if(data.override){
     if(data.series)series_type.type = data.series
     if(!data.default_description) series_description.desc = data.series_description
-      
+    if(data.radiant_score != null){
+      radiant_wins.value = data.radiant_score
+    } 
+    if(data.dire_score != null){
+      dire_wins.value = data.dire_score
+    }
     //set draft settings from dashboard
     setting_override.value = true
   }
@@ -417,8 +428,8 @@ overlaySocket.on('settings:toggle_music',() =>{
     dire_team_info={dire_team_info.value}
     series_type={series_type.type}
     series_description={series_description.desc}
-    bind:radiant_wins={radiant_wins}
-    bind:dire_wins={dire_wins}
+    radiant_wins={radiant_wins}
+    dire_wins={dire_wins}
 
   />
   <div class="side_container">
